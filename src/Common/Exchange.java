@@ -1,8 +1,10 @@
+package Common;
 
 public class Exchange {
-	float profit = 0, allFees = 0;
-	int sharesOwned = 0;
-	float priceBought = 0;
+	public float profit = 0;
+	public float allFees = 0;
+	public int sharesOwned = 0;
+	public float priceBought = 0;
 	
 	public float buy(int num, float price, float fees) {
 		float cost = num * price + (num * price * fees);

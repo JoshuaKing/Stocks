@@ -1,3 +1,4 @@
+package Common;
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.util.ArrayList;
@@ -17,7 +18,7 @@ public class CsvLoad {
 					line = nextLine;
 					continue;
 				}
-				stock.add(PricePoint.generate(line.split(","), nextLine.split(",")));
+				stock.add(0, PricePoint.generate(line.split(","), nextLine.split(",")));
 				line = nextLine;
 			}
 			br.close();
