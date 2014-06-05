@@ -51,7 +51,6 @@ public class Parse {
 			runningAvg.add(stock.get(stock.size() - 1 - i));
 		}
 		
-		float badBuy = 0;
 		for (int i = stock.size() - 1 - 5; i > 6; i--) {
 			PricePoint today = stock.get(i);
 			
@@ -66,6 +65,7 @@ public class Parse {
 			PricePoint weekMax = max(stock.subList(i - 5, i));
 			PricePoint nextWeek = stock.get(i - 6);
 
+			// Check if we will profit even if everything happens correctly
 			if (!exchange.test(numShares, today.open, avg, fees)) continue;
 			
 			float buyCost = exchange.buy(numShares, today.open, fees);
