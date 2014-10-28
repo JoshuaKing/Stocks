@@ -75,7 +75,7 @@ public class AlgorithmKnn implements Algorithm {
 		
 		stock.reset();
 		exchange.summarise("Algorithm KNN");
-		Log.alert("Increase: " + correctIncrease + " | " + incorrectIncrease + "  " + correctIncrease/(correctIncrease + incorrectIncrease) + "%");
-		Log.alert("Decrease: " + correctDecrease + " | " + incorrectDecrease + "  " + correctDecrease/(correctDecrease + incorrectDecrease) + "%");
+		Log.alert("Increase: " + correctIncrease + " | " + incorrectIncrease + "  " + (float)correctIncrease/(correctIncrease + incorrectIncrease)*100.0 + "%");
+		Log.alert("Decrease: " + correctDecrease + " | " + incorrectDecrease + "  " + (float)correctDecrease/(correctDecrease + incorrectDecrease)*100.0 + "%");
 	}
 }
