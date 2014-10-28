@@ -1,6 +1,7 @@
 package Common;
 import java.util.List;
 
+import Algorithms.AlgorithmBuyLow;
 import Algorithms.AlgorithmHold;
 import Algorithms.AlgorithmKnn;
 
@@ -12,8 +13,14 @@ public class Parse {
 	public static void main(String[] args) {
 		
 		try {
-			List<PricePoint> stock = CsvLoad.loadNormalCsv(args[0]);
-			new AlgorithmKnn().run(stock, moneyInvested, fees);
+			Stock stock = new Stock(CsvLoad.loadNormalCsv(args[0]));
+			new AlgorithmKnn(stock.subset(0, 300), 3, 5, false).run(stock.subset(300), moneyInvested, fees);
+			new AlgorithmBuyLow((float) 0.05).run(stock, moneyInvested, fees);
+			/*new AlgorithmBuyLow((float) 0.05).run(stock, moneyInvested, fees);
+			new AlgorithmBuyLow((float) 0.08).run(stock, moneyInvested, fees);
+			new AlgorithmBuyLow((float) 0.1).run(stock, moneyInvested, fees);
+			new AlgorithmBuyLow((float) 0.1, 90).run(stock, moneyInvested, fees);
+			*///new AlgorithmTest().run(stock, moneyInvested, fees);
 			new AlgorithmHold().run(stock, moneyInvested, fees);
 		} catch (Exception e) {
 			System.out.println(e.getMessage());

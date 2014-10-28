@@ -4,23 +4,27 @@ import java.util.SortedMap;
 import java.util.TreeMap;
 
 
-public class KNN {
-	List<PricePoint> training;
+public class Knn {
+	Stock training;
 	int knn = 3;
 	
-	public KNN(List<PricePoint> trainData, int knn) {
+	public int neighbours() {
+		return knn;
+	}
+	
+	public Knn(Stock trainData, int knn) {
 		training = trainData;
 		this.knn = knn;
 	}
 	
-	public float score(List<PricePoint> test) {
+	public float score(Stock test) {
 		TreeMap<Float, PricePoint> neighbours = new TreeMap<Float, PricePoint>();
 		
-		for (int i = test.size(); i < training.size() - 1; i++) {
-			List<PricePoint> sample = training.subList(i - test.size(), i);
+		for (int i = 0; i <= training.size() - test.size(); i++) {
+			Stock sample = training.subset(i, i + test.size());
 			Float score = compare(sample, test);
 			
-			neighbours.put(score, training.get(i + 1));
+			neighbours.put(score, training.exact(i + 1));
 			
 			if (neighbours.size() > knn) {
 				neighbours.remove(neighbours.lastKey());
@@ -30,21 +34,21 @@ public class KNN {
 		float score = 0;
 		while (neighbours.size() > 0) {
 			PricePoint p = neighbours.remove(neighbours.firstKey());
-			score += p.open / knn;
+			score += p.deltaOpen;
 		}
 		
-		return score;
+		return score / knn;
 	}
 	
-	private float compare(List<PricePoint> s1, List<PricePoint> s2) {
+	private float compare(Stock s1, Stock s2) {
 		float score = 0;
 		
 		for (int i = 0; i < s1.size(); i++) {
-			PricePoint a = s1.get(i);
-			PricePoint b = s2.get(i);
+			PricePoint a = s1.exact(i);
+			PricePoint b = s2.exact(i);
 			
-			score += Math.abs(a.open - b.open) + Math.abs(a.close - b.close) + Math.abs(a.max - b.max) + Math.abs(a.min - b.min);
-			score += Math.abs(a.deltaPrice - b.deltaPrice) + Math.abs(a.deltaVolume - b.deltaVolume);
+			//score += Math.abs(a.open - b.open) + Math.abs(a.close - b.close) + Math.abs(a.max - b.max) + Math.abs(a.min - b.min);
+			score += Math.abs(a.deltaOpen - b.deltaOpen);// + Math.abs(a.deltaVolume - b.deltaVolume);
 		}
 		
 		return score;
