@@ -12,9 +12,10 @@ import Common.PricePoint;
 import Common.Stock;
 
 public class AlgorithmHold implements Algorithm {
+	float spent = 0;
 
 	@Override
-	public void run(Stock stock, float moneyInvested, float fees) {
+	public Exchange run(Stock stock, float moneyInvested, float fees, int since) {
 		String currentYear = "";
 		Exchange exchange = new Exchange();
 		
@@ -22,20 +23,31 @@ public class AlgorithmHold implements Algorithm {
 			PricePoint today = stock.today();
 			
 			// Get year
-			String year = today.date.substring(6);
-			
+			String year = today.getYear();
+			if (Integer.valueOf(today.getYear()) >= since) continue;
 			if (!year.equals(currentYear)) {
-				exchange.sell(stock.yesterday().open, fees, currentYear);
+				spent += exchange.sell(stock.yesterday().open, fees, stock.yesterday());
 				currentYear = year;
 				int numShares = (int) Math.floor(moneyInvested/today.open);
-				exchange.buy(numShares, today.open, fees, year);
+				spent += exchange.buy(numShares, today.open, fees, today);
 			}
 		}
 		if (exchange.hasShares()) {
-			exchange.sell(stock.last().close, fees, currentYear);
+			spent += exchange.sell(stock.last().close, fees, stock.last());
 		}
 		stock.reset();
-		exchange.summarise("Algorithm Hold");
+		//exchange.summarise("Algorithm Hold");
+		return exchange;
+	}
+
+	@Override
+	public float spent() {
+		return spent;
+	}
+
+	@Override
+	public String name() {
+		return "Algorithm Hold";
 	}
 
 }
