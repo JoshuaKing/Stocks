@@ -24,7 +24,8 @@ public class AlgorithmHold implements Algorithm {
 			
 			// Get year
 			String year = today.getYear();
-			if (Integer.valueOf(today.getYear()) >= since) continue;
+			
+			if (Integer.valueOf(today.getYear()) < since) continue;
 			if (!year.equals(currentYear)) {
 				spent += exchange.sell(stock.yesterday().open, fees, stock.yesterday());
 				currentYear = year;

@@ -22,7 +22,7 @@ public class AlgorithmBuyLow implements Algorithm {
 			
 			int numShares = (int) Math.floor(moneyInvested/today.open);
 			
-			if (Integer.valueOf(today.getYear()) >= since) continue;
+			if (Integer.valueOf(today.getYear()) < since) continue;
 			if (today.open < longTermPrice) {
 				if (!exchange.hasShares() && !exchange.hasShortedShares() && exchange.test(numShares, today.open, longTermPrice, fees)) spent += exchange.buy(numShares, today.open, fees, today);
 			} else {

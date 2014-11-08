@@ -17,12 +17,12 @@ public class Parse {
 			float roiA = 0, roiB = 0;
 			int num = 0;
 			
-			for (int i = 0; i < 200; i+=40) {
-				List<Stock> stocks = CsvLoad.loadStockListCsv(args[0], false, i, i+40);
+			//for (int i = 0; i < 200; i+=40) {
+				List<Stock> stocks = CsvLoad.loadStockListCsv(args[0], false, 0, 0);
 				num += 1;
 				roiA += runAlgorithm("BuyLow", new AlgorithmBuyLow((float) 0.05), stocks, startFromYear);
 				roiB += runAlgorithm("Hold", new AlgorithmHold(), stocks, startFromYear);
-			}
+			//}
 			Log.alert("\n=======================================================");
 			Log.alert("Algorithm Buy Low ROI since " + startFromYear + ": " + roiA/num);
 			Log.alert("Algorithm Hold ROI since " + startFromYear + ": " + roiB/num);
