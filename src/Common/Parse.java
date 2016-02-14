@@ -1,7 +1,7 @@
 package Common;
+
 import Algorithms.Algorithm;
-import Algorithms.AlgorithmBuyLow;
-import Algorithms.AlgorithmHold;
+import Algorithms.AlgorithmLearn;
 
 import java.text.NumberFormat;
 import java.util.List;
@@ -9,7 +9,7 @@ import java.util.List;
 
 public class Parse {
 	private static final Float fees = 0.0011F;
-	private static final Float MONEY_INVESTED = 1000000F;
+	private static final Float MONEY_INVESTED = 100000F;
 	private static final int START_FROM_YEAR = 2005;
 	private static final int END_AT_YEAR = 2015;
 	private static final int STOCKS_PER_ITERATION = 40;
@@ -19,7 +19,7 @@ public class Parse {
 	public static void main(String[] args) {
 		
 		try {
-			float moneyA = 0, moneyB = 0;
+			float moneyA = 0, moneyB = 0, moneyC = 0;
 			int num = 0;
 			nf.setParseIntegerOnly(true);
 			nf.setMaximumFractionDigits(0);
@@ -27,15 +27,18 @@ public class Parse {
 			for (int i = 0; i < TOTAL_STOCKS; i+= STOCKS_PER_ITERATION) {
 				List<Stock> stocks = CsvLoad.loadStockListCsv(args[0], false, i, i + STOCKS_PER_ITERATION - 1);
 				num += 1;
-				moneyA += runAlgorithm("BuyLow", new AlgorithmBuyLow(0.00F), stocks, START_FROM_YEAR, END_AT_YEAR);
-				moneyB += runAlgorithm("Hold", new AlgorithmHold(), stocks, START_FROM_YEAR, END_AT_YEAR);
+				moneyA += 1;//runAlgorithm("BuyLow", new AlgorithmBuyLow(0.0F, 0.1F), stocks, START_FROM_YEAR, END_AT_YEAR);
+				moneyB += 1;//runAlgorithm("Hold", new AlgorithmHold(), stocks, START_FROM_YEAR, END_AT_YEAR);
+				moneyC += runAlgorithm("Learn", new AlgorithmLearn(), stocks, START_FROM_YEAR, END_AT_YEAR);
 			}
 			Log.alert("");
 			Log.alert("=======================================================");
 			Log.alert("Algorithm Buy Low ROI since " + START_FROM_YEAR + ": " + moneyA/(MONEY_INVESTED * num * STOCKS_PER_ITERATION));
 			Log.alert("Algorithm Hold ROI since " + START_FROM_YEAR + ": " + moneyB/(MONEY_INVESTED * num * STOCKS_PER_ITERATION));
+			Log.alert("Algorithm Learn ROI since " + START_FROM_YEAR + ": " + moneyC/(MONEY_INVESTED * num * STOCKS_PER_ITERATION));
 			Log.alert("Algorithm Buy Low TOTAL " + nf.format(moneyA));
 			Log.alert("Algorithm Hold TOTAL " +  nf.format(moneyB));
+			Log.alert("Algorithm Learn TOTAL " +  nf.format(moneyC));
 			Log.alert("=======================================================");
 		} catch (Exception e) {
 			Log.error(e);

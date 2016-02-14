@@ -11,7 +11,7 @@ public class AlgorithmHold implements Algorithm {
 	@Override
 	public Exchange run(Stock stock, float moneyInvested, float fees, int from, int to) {
 		String currentYear = "";
-		Exchange exchange = new Exchange();
+		Exchange exchange = new Exchange(moneyInvested);
 		revenue = moneyInvested;
 		
 		while(stock.next()) {

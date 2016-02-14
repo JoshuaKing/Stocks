@@ -40,6 +40,58 @@ public class Stock {
 		index++;
 		return index < stock.size();
 	}
+
+	public float average(int days) {
+		float total = 0;
+		PricePoint last = null;
+		int i;
+
+		for (i = 1; i < days; i++) {
+			PricePoint current = get(i);
+			if (current == last) break;
+			last = current;
+			total += current.avgPrice;
+		}
+
+		return total / i;
+	}
+
+	public float averageOpen(int days) {
+		float total = 0;
+		PricePoint last = null;
+		int i;
+
+		for (i = 1; i < days; i++) {
+			PricePoint current = get(i);
+			if (current == last) break;
+			last = current;
+			total += current.open;
+		}
+
+		return total / i;
+	}
+
+	public float max(int days) {
+		float max = 0;
+
+		for (int i = 1; i < days; i++) {
+			float v = get(i).max;
+			max = (v > max) ? v : max;
+		}
+
+		return max;
+	}
+
+	public float min(int days) {
+		float min = 0;
+
+		for (int i = 1; i < days; i++) {
+			float v = get(i).min;
+			min = (v < min) ? v : min;
+		}
+
+		return min;
+	}
 	
 	public void reset() {
 		index = -1;

@@ -10,17 +10,55 @@ public class Exchange {
 	private int sharesOwned = 0;
 	private int sharesShort = 0;
 	private float totalSpent = 0;
+	private float cash = 0;
+	private LinkedHashMap<Float, Float> sellOrders = new LinkedHashMap<>();
 	private LinkedHashMap<String, Float> profitEachYear = new LinkedHashMap<String, Float>();
+
+	public Exchange(Float cash) {
+		this.cash = cash;
+	}
 	
 	public LinkedHashMap<String, Float> yearlyProfits() {
 		return profitEachYear;
 	}
-	
+
+	public void sellOrder(float price, int num, float fees) {
+		float fee = (num * price * fees);
+		float earnings = num * price - fee;
+		sellOrders.put(price, earnings);
+	}
+
+	public void handle(float currentPrice, String year) {
+		//Log.alert(year + ": Sold stock for " + entry.getValue() + " profit.");
+		sellOrders.entrySet().stream().filter(entry -> entry.getKey() < currentPrice).forEach(entry -> {
+			cash += entry.getValue();
+			//Log.alert(year + ": Sold stock for " + entry.getValue() + " profit.");
+			if (profitEachYear.containsKey(year)) {
+				profitEachYear.put(year, profitEachYear.get(year) + entry.getValue());
+			} else {
+				profitEachYear.put(year, entry.getValue());
+			}
+		});
+	}
+
+	public void handleLast(String year) {
+		sellOrders.entrySet().stream().forEach(entry -> {
+			cash += entry.getValue();
+			//Log.alert(year + ": Sold stock for " + entry.getValue() + " profit.");
+			if (profitEachYear.containsKey(year)) {
+				profitEachYear.put(year, profitEachYear.get(year) + entry.getValue());
+			} else {
+				profitEachYear.put(year, entry.getValue());
+			}
+		});
+	}
+
 	public float buy(int num, float price, float fees, PricePoint p) {
 		float cost = num * price + (num * price * fees);
 		totalFees += (num * price * fees);
 		
 		profit -= cost;
+		cash -= cost;
 		sharesOwned += num;
 		Log.debug(p.date + ": Bought " + num + " shares for $" + cost + " @" + price + "ea. (total shares: " + sharesOwned + ")");
 		
@@ -42,6 +80,7 @@ public class Exchange {
 		totalSpent += fee;
 
 		profit += earnings;
+		cash += earnings;
 		Log.debug(p.date + ": Sold " + sharesOwned + " shares for $" + earnings + " @" + price + "ea. (profit so far: " + profit + ")");
 		sharesOwned = 0;
 
@@ -62,6 +101,7 @@ public class Exchange {
 		totalSpent += fee;
 		
 		profit += earnings;
+		cash += earnings;
 		Log.debug(p.date + ": Shorted " + num + " shares for $" + earnings + " @" + price + "ea. (total short shares: " + sharesShort + ")");
 
 		String year = p.getYear();
@@ -81,6 +121,7 @@ public class Exchange {
 		totalSpent += cost;
 		
 		profit -= cost;
+		cash -= cost;
 		totalSpent += cost;
 		Log.debug(p.date + ": Bought back " + sharesShort + " shares for $" + cost + " @" + price + "ea. (total profit so far: " + profit + ")");
 		sharesShort = 0;
@@ -98,7 +139,7 @@ public class Exchange {
 		float cost = num * buy + (num * buy * fees);
 		float earnings = num * sell - (num * sell * fees);
 		
-		return cost < earnings;
+		return cost < earnings && cost < cash;
 	}
 	
 	public float testBuy(int num, Float buy, Float sell, Float fees) {
@@ -106,6 +147,10 @@ public class Exchange {
 		float earnings = num * sell - (num * sell * fees);
 		
 		return earnings - cost;
+	}
+
+	public float getCash() {
+		return cash;
 	}
 	
 	public boolean hasShares() {
