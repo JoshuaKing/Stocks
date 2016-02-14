@@ -7,7 +7,6 @@ public class PricePoint {
 
 		public static PricePoint generate(String[] csv, String[] nextCsv) {
 			String date = csv[0].substring(8) + "/" + csv[0].substring(5, 7) + "/" + csv[0].substring(0, 4);
-			
 			Float avgYesterday = (Float.valueOf(nextCsv[1]) + Float.valueOf(nextCsv[2]) + Float.valueOf(nextCsv[3]) + Float.valueOf(nextCsv[4])) / 4;
 			Float volToday = Float.valueOf(csv[5]);
 			Float volYesterday = Float.valueOf(nextCsv[5]);

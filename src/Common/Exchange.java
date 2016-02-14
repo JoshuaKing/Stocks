@@ -1,9 +1,7 @@
 package Common;
 
-import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
-import java.util.List;
 import java.util.Map.Entry;
 
 public class Exchange {
@@ -41,6 +39,7 @@ public class Exchange {
 		float fee = (sharesOwned * price * fees);
 		float earnings = sharesOwned * price - fee;
 		totalFees += fee;
+		totalSpent += fee;
 
 		profit += earnings;
 		Log.debug(p.date + ": Sold " + sharesOwned + " shares for $" + earnings + " @" + price + "ea. (profit so far: " + profit + ")");
@@ -52,7 +51,7 @@ public class Exchange {
 		} else {
 			profitEachYear.put(year, earnings);
 		}
-		return fee;
+		return earnings;
 	}
 	
 	public float shortSell(int num, float price, float fees, PricePoint p) {
@@ -60,6 +59,7 @@ public class Exchange {
 		float fee = (sharesShort * price * fees);
 		float earnings = sharesShort * price - fee;
 		totalFees += fee;
+		totalSpent += fee;
 		
 		profit += earnings;
 		Log.debug(p.date + ": Shorted " + num + " shares for $" + earnings + " @" + price + "ea. (total short shares: " + sharesShort + ")");
@@ -78,6 +78,7 @@ public class Exchange {
 		
 		float cost = sharesShort * price + (sharesShort * price * fees);
 		totalFees += (sharesShort * price * fees);
+		totalSpent += cost;
 		
 		profit -= cost;
 		totalSpent += cost;
@@ -98,6 +99,13 @@ public class Exchange {
 		float earnings = num * sell - (num * sell * fees);
 		
 		return cost < earnings;
+	}
+	
+	public float testBuy(int num, Float buy, Float sell, Float fees) {
+		float cost = num * buy + (num * buy * fees);
+		float earnings = num * sell - (num * sell * fees);
+		
+		return earnings - cost;
 	}
 	
 	public boolean hasShares() {
@@ -137,5 +145,9 @@ public class Exchange {
 	
 	public int sharesOwned() {
 		return sharesOwned;
+	}
+
+	public float spent() {
+		return totalSpent;
 	}
 }

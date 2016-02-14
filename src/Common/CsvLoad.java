@@ -1,11 +1,5 @@
 package Common;
-import java.awt.datatransfer.StringSelection;
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.FileReader;
-import java.io.IOException;
-import java.io.InputStream;
+import java.io.*;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
@@ -27,7 +21,7 @@ public class CsvLoad {
 				}
 				String stock = line.split(",", 2)[0].toLowerCase();
 				if (!forceRefresh && new File("lib/" + stock + ".csv").exists()) {
-					Log.debug("Already have " + stock.toUpperCase());
+					//Log.debug("Already have " + stock.toUpperCase());
 					stockList.add(loadStockCsv(stock));
 				} else {
 					String url = "http://real-chart.finance.yahoo.com/table.csv?s=" + stock.toUpperCase() + "&a=00&b=1&c=1970&d=11&e=31&f=2015&g=d&ignore=.csv";
@@ -37,13 +31,12 @@ public class CsvLoad {
 				}
 				i++;
 				if (i % 10 == 0) {
-					//Log.alert("Loaded " + (i - from));
+					Log.debug("Loaded " + (i - from));
 				}
 			}
 			br.close();
 		} catch (Exception e) {
-			System.out.println(e.getMessage());
-			System.exit(0);
+			Log.error(e);
 		}
 		
 		return stockList;
@@ -61,13 +54,13 @@ public class CsvLoad {
 					line = nextLine;
 					continue;
 				}
+				if (nextLine.split(",").length != 7) Log.warn(stockId + ": " + nextLine);
 				stock.add(0, PricePoint.generate(line.split(","), nextLine.split(",")));
 				line = nextLine;
 			}
 			br.close();
 		} catch (Exception e) {
-			System.out.println(e.getMessage());
-			System.exit(0);
+			Log.error(e);
 		}
 		
 		return new Stock(stockId.toUpperCase(), stock);
@@ -91,7 +84,7 @@ public class CsvLoad {
 	        
 	        return new File(localFilename);
 	    } catch (Exception e) {
-	    	Log.alert("Error downloading " + url + " to file " + localFilename);
+	    	Log.warn("Error downloading " + url + " to file " + localFilename);
 	    	return null;
 	    }
 	}
