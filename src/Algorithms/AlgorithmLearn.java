@@ -21,7 +21,8 @@ public class AlgorithmLearn implements Algorithm {
 			
 			int numShares = (int) Math.floor(CASH_SPEND/today.open);
 			
-			if (Integer.valueOf(today.getYear()) < from || Integer.valueOf(today.getYear()) > to) continue;
+			if (Integer.valueOf(today.getYear()) < from) continue;
+			if (Integer.valueOf(today.getYear()) > to) break;
 			if (today.open < avg) {
 				float min = stock.min(182);
 				float percent = 1/ ((today.open - min) / (avg - min));
@@ -36,7 +37,7 @@ public class AlgorithmLearn implements Algorithm {
 		
 		if (exchange.hasShares()) {
 			//revenue += exchange.sell(stock.last().close, fees, stock.last());
-			exchange.handleLast(stock.last().getYear());
+			exchange.handleLast(stock.prev().getYear(), stock.prev().close);
 		}
 		
 		stock.reset();

@@ -112,6 +112,10 @@ public class Stock {
 	public PricePoint last() {
 		return stock.get(stock.size() - 1);
 	}
+
+	public PricePoint prev() {
+		return stock.get(index - 1);
+	}
 	
 	public Stock subset(int from, int to) {
 		return new Stock(name + "(" + from + "-" + to + ")", stock.subList(from, to));

@@ -32,7 +32,7 @@ public class Exchange {
 		//Log.alert(year + ": Sold stock for " + entry.getValue() + " profit.");
 		sellOrders.entrySet().stream().filter(entry -> entry.getKey() < currentPrice).forEach(entry -> {
 			cash += entry.getValue();
-			Log.debug(year + ": Sold shares for $" + entry.getValue() + " @" + entry.getKey() + "ea. (cash: " + cash + ")");
+			Log.debug(year + " @" + currentPrice + ": Sold shares for $" + entry.getValue() + " @" + entry.getKey() + "ea. (cash: " + cash + ")");
 			//Log.alert(year + ": Sold stock for " + entry.getValue() + " profit.");
 			if (profitEachYear.containsKey(year)) {
 				profitEachYear.put(year, profitEachYear.get(year) + entry.getValue());
@@ -43,14 +43,15 @@ public class Exchange {
 		sellOrders.entrySet().removeIf(entry -> entry.getKey() < currentPrice);
 	}
 
-	public void handleLast(String year) {
+	public void handleLast(String year, Float currentPrice) {
 		sellOrders.entrySet().stream().forEach(entry -> {
-			cash += entry.getValue();
+			float value = (float) (Math.floor(entry.getValue() / entry.getKey()) * currentPrice);
+			cash += value;
 			//Log.alert(year + ": Sold stock for " + entry.getValue() + " profit.");
 			if (profitEachYear.containsKey(year)) {
-				profitEachYear.put(year, profitEachYear.get(year) + entry.getValue());
+				profitEachYear.put(year, profitEachYear.get(year) + value);
 			} else {
-				profitEachYear.put(year, entry.getValue());
+				profitEachYear.put(year, value);
 			}
 		});
 		sellOrders.clear();
