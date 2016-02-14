@@ -3,7 +3,7 @@ package Common;
 
 public class Log {
 
-	private static final boolean debug = false;
+	private static final boolean debug = true;
 	private static final boolean info = true;
 	private static final boolean alert = true;
 

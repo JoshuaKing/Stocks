@@ -12,8 +12,8 @@ public class Parse {
 	private static final Float MONEY_INVESTED = 100000F;
 	private static final int START_FROM_YEAR = 2005;
 	private static final int END_AT_YEAR = 2015;
-	private static final int STOCKS_PER_ITERATION = 40;
-	private static final int TOTAL_STOCKS = 100;
+	private static final int STOCKS_PER_ITERATION = 10;
+	private static final int TOTAL_STOCKS = 10;
 	private static NumberFormat nf = NumberFormat.getCurrencyInstance();
 
 	public static void main(String[] args) {
@@ -56,7 +56,7 @@ public class Parse {
 			totalfees += exchange.fees();
 			profit2014 += exchange.yearlyProfits().get("2009") == null ? 0 : exchange.yearlyProfits().get("2009");
 			
-			Log.info("Stock " + stock.name() + ": " + exchange.profit() + " ROI " + (exchange.profit() + MONEY_INVESTED)/ MONEY_INVESTED + " (Fees: " + exchange.fees() + ")");
+			Log.info("Stock " + stock.name() + ": " + exchange.getCash() + " ROI " + (exchange.profit() + MONEY_INVESTED)/ MONEY_INVESTED + " (Fees: " + exchange.fees() + ")");
 		}
 		float roi = money / (MONEY_INVESTED * stocks.size());
 		Log.alert("Algorithm " + name + ": End value " + money + " ROI " + roi + " (Fees: " + totalfees + ")");

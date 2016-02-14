@@ -1,6 +1,7 @@
 package Algorithms;
 
 import Common.Exchange;
+import Common.Log;
 import Common.PricePoint;
 import Common.Stock;
 
@@ -26,6 +27,7 @@ public class AlgorithmLearn implements Algorithm {
 				float percent = 1/ ((today.open - min) / (avg - min));
 				float price = today.open * (0.5F + percent * 0.5F);
 				if (exchange.test(numShares, today.open, price, fees)) {
+					Log.debug("From min " + min + " avg " + avg + " : Expecting price to rise to " + price + " from " + today.open);
 					revenue -= exchange.buy(numShares, today.open, fees, today);
 					exchange.sellOrder(price, numShares, fees);
 				}

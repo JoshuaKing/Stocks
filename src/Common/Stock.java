@@ -83,7 +83,7 @@ public class Stock {
 	}
 
 	public float min(int days) {
-		float min = 0;
+		float min = Float.POSITIVE_INFINITY;
 
 		for (int i = 1; i < days; i++) {
 			float v = get(i).min;
