@@ -2,7 +2,7 @@ package Common;
 
 public class PricePoint {
 		public String date;
-		public Float avgPrice, deltaPrice, deltaVolume, deltaOpen;
+		public Float avgPrice, deltaPrice, deltaVolume, deltaOpen, variance;
 		public Float open, close, min, max;
 
 		public static PricePoint generate(String[] csv, String[] nextCsv) {
@@ -18,6 +18,8 @@ public class PricePoint {
 			p.max = Float.valueOf(csv[2]);
 			p.min = Float.valueOf(csv[3]);
 			p.close = Float.valueOf(csv[4]);
+
+			p.variance = p.max - p.min;
 
 			p.deltaVolume = (volToday - volYesterday) / volYesterday;
 			
